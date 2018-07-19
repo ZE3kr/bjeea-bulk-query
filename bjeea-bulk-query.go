@@ -10,7 +10,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type Examinee struct {
@@ -94,25 +93,25 @@ func parseExaminees(data string) (Examinees []Examinee) {
 }
 
 func getExamineesDetail(examinees []Examinee) (newExaminees []Examinee) {
-	var i int
-	for range examinees {
-		go func() {
-			if examineeDetail := getExamineeDetail(examinees[i]); examineeDetail.name != "" {
-				newExaminees = append(newExaminees, examineeDetail)
-			} else {
-				examinees[i].failed = true
-				newExaminees = append(newExaminees, examinees[i])
+	examineesChannel := make(chan Examinee)
+	for _, examinee := range examinees {
+		go func(examinee Examinee) {
+			examineeDetail := getExamineeDetail(examinee)
+			if examineeDetail.name == "" {
+				examinee.failed = true
 			}
-			i += 1
-		}()
+			examineesChannel <- examineeDetail
+		}(examinee)
 	}
 
 	for {
-		time.Sleep(time.Millisecond * 100)
-		if i == len(examinees) {
+		examinee := <-examineesChannel
+		newExaminees = append(newExaminees, examinee)
+		if len(newExaminees) == len(examinees) {
 			return newExaminees
 		}
 	}
+	return newExaminees
 }
 
 func getExamineeDetail(examinee Examinee) Examinee {
