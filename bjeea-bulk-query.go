@@ -16,7 +16,7 @@ import (
 type Examinee struct {
 	name           string
 	examNo         int
-	examineeNo     int
+	examineeNo     int64
 	university     string
 	universityNo   int
 	major          string
@@ -62,7 +62,7 @@ func main() {
 	} else if inputExamineeSlice := strings.Split(*inputExaminee, ","); len(inputExamineeSlice) == 2 {
 		var examinee Examinee
 		examinee.examNo, _ = strconv.Atoi(strings.TrimSpace(inputExamineeSlice[0]))
-		examinee.examineeNo, _ = strconv.Atoi(strings.TrimSpace(inputExamineeSlice[1]))
+		examinee.examineeNo, _ = strconv.ParseInt(strings.TrimSpace(inputExamineeSlice[1]), 10, 64)
 		fmt.Print(getExamineeDetail(examinee))
 	} else {
 		kingpin.FatalUsage("参数错误, 请提供文件名或考生信息. 准考证号应为 9 位, 考生号应为 14 位\n")
@@ -80,7 +80,7 @@ func parseExaminees(data string) (Examinees []Examinee) {
 			continue
 		} else if examNo, err := strconv.Atoi(strings.TrimSpace(lineSlice[0])); err == nil {
 			Examinee.examNo = examNo
-			if examineeNo, err := strconv.Atoi(strings.TrimSpace(lineSlice[1])); err == nil {
+			if examineeNo, err := strconv.ParseInt(strings.TrimSpace(lineSlice[1]), 10, 64); err == nil {
 				Examinee.examineeNo = examineeNo
 				Examinees = append(Examinees, Examinee)
 			}
