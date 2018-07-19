@@ -111,7 +111,6 @@ func getExamineesDetail(examinees []Examinee) (newExaminees []Examinee) {
 			return newExaminees
 		}
 	}
-	return newExaminees
 }
 
 func getExamineeDetail(examinee Examinee) Examinee {
