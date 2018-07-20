@@ -104,13 +104,12 @@ func getExamineesDetail(examinees []Examinee) (newExaminees []Examinee) {
 		}(examinee)
 	}
 
-	for {
+	for len(newExaminees) < len(examinees) {
 		examinee := <-examineesChannel
 		newExaminees = append(newExaminees, examinee)
-		if len(newExaminees) == len(examinees) {
-			return newExaminees
-		}
 	}
+
+	return newExaminees
 }
 
 func getExamineeDetail(examinee Examinee) Examinee {
