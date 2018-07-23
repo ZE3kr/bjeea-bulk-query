@@ -73,7 +73,7 @@ bjeea-bulk-query file.csv
 ## 批量查询 (以 CSV 格式返回)
 
 ```bash
-bjeea-bulk-query --csv file.csv
+bjeea-bulk-query file.csv --csv
 ```
 
 加入 `--csv` 参数后可以返回 CSV 格式， 成功返回结果样例
